@@ -1,5 +1,5 @@
 # Fake news classifier  
----
+
 This project focuses on fake news detection problem and provides simple pipeline for that task.  
 
 ## Basic project setup
