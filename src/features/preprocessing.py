@@ -10,7 +10,17 @@ RELATION_MAPPINGS = {
 }
 
 
-def dataframe_preprocessor(body_df, stances_df):
+def df_preprocessor(body_df: pd.DataFrame, stances_df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Performs basic clean-up on both inupt DataFrames, merges them into one dataset and finally splits that set into feature and label sets.
+
+    Args:
+        body_df (pd.DataFrame): DataFrame containing data about article bodies
+        stances_df (pd.DataFrame): DataFrame containing data about article stances
+
+    Returns:
+        pd.DataFrame: merged dataset
+    """
     body_df = body_df.rename(columns={"Body ID": "body_id", "articleBody": "article_body"})
     stances_df = stances_df.rename(columns={"Body ID": "body_id"})
     stances_df.columns = stances_df.columns.str.lower()
@@ -20,12 +30,23 @@ def dataframe_preprocessor(body_df, stances_df):
     df["relation"] = df.apply(lambda row: RELATION_MAPPINGS[row["stance"]], axis=1)
     df = df.drop(columns=["body_id"])
 
-    X, y = df[["article_body", "headline"]], df[["stance", "relation"]]
-
-    return X, y
+    return df
 
 
-def data_preprocessor(X: pd.DataFrame, y: pd.DataFrame, encoder: Callable) -> Tuple:
+def dataset_preprocessor(X: pd.DataFrame, y: pd.DataFrame, encoder: Callable) -> Tuple:
+    """
+    Perofrms preprocessing on full DataFrame and returns feature-label DataFrame pairs for both stages of classification.
+    Additionally it returns list of indices used to generate stance classification dataset.
+
+    Args:
+        X (pd.DataFrame): DataFrame containing headlines and article bodies
+        y (pd.DataFrame): DataFrame containing labels (relations and stances)
+        encoder (Callable): Label encoder for stance labels
+
+    Returns:
+        Tuple: feature-label DataFrame pairs (for relation and classification problems), indices used to generate stance classification set
+    """    
+
     # Find indices for matching headline-body classification step
     cls_indices = y["stance"] != "unrelated"
     cls_indices = cls_indices[cls_indices].index
