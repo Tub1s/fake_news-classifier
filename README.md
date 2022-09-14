@@ -26,7 +26,7 @@ Configuration of most training and testing utilities is located in `config.toml`
 
 ## Plans for future
 - Refactor classification pipeline to allow usage of different kinds of models
-- Add more sophisticated training loop for XGBoost that would allow k-fold Cross Validation
+- Add more sophisticated training loop for XGBoost that would allow k-fold Cross Validation and hyper-parameter optimization
 - Move project to stand-alone scripts
 - Full test coverage
 
