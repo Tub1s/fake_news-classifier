@@ -2,12 +2,28 @@ import numpy as np
 import pandas as pd
 from typing import Callable, Tuple
 
-def dataframe_preprocessor(body_df, stances_df, mappings):
+RELATION_MAPPINGS = {
+    "agree": "related",
+    "disagree": "related",
+    "discuss": "related",
+    "unrelated": "unrelated"
+}
+
+
+def dataframe_preprocessor(body_df, stances_df):
     body_df = body_df.rename(columns={"Body ID": "body_id", "articleBody": "article_body"})
     stances_df = stances_df.rename(columns={"Body ID": "body_id"})
     stances_df.columns = stances_df.columns.str.lower()
 
     df = pd.merge(body_df, stances_df, on="body_id")
+
+    df["relation"] = df.apply(lambda row: RELATION_MAPPINGS[row["stance"]], axis=1)
+    df = df.drop(columns=["body_id"])
+
+    X, y = df[["article_body", "headline"]], df[["stance", "relation"]]
+
+    return X, y
+
 
 def data_preprocessor(X: pd.DataFrame, y: pd.DataFrame, encoder: Callable) -> Tuple:
     # Find indices for matching headline-body classification step

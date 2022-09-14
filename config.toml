@@ -1,0 +1,23 @@
+[global]
+random_state = 1
+test_size = 0.2
+steps = 100
+
+[headline_vectorizer]
+analyzer = "word"
+stop_words = "english"
+lowercase = true
+
+[body_vectorizer]
+analyzer = "word"
+stop_words = "english"
+lowercase = true
+
+[rel_params]
+eta = 0.3
+max_depth = 12
+
+[cls_params]
+eta = 0.3
+max_depth = 20
+num_class = 3
