@@ -2,6 +2,7 @@
 random_state = 1
 test_size = 0.2
 steps = 100
+train_multiple_models = true # If set to false, config params will be used in training
 
 [headline_vectorizer]
 analyzer = "word"
